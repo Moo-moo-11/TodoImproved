@@ -1,0 +1,3 @@
+package moomoo.todoimproved.domain.todo.repository
+
+interface CustomTodoRepository
