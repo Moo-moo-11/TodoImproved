@@ -7,7 +7,7 @@ import moomoo.todoimproved.domain.user.model.User
 
 @Entity
 class Comment(
-    var comment: String,
+    var content: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     var todo: Todo,
@@ -18,4 +18,12 @@ class Comment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun updateComment(content: String) {
+        this.content = content
+    }
+
+    fun checkPermission(userId: Long): Boolean {
+        return user.id == userId
+    }
 }

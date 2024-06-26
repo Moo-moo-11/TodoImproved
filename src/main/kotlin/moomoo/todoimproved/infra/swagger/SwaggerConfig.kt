@@ -31,8 +31,8 @@ class SwaggerConfig {
         )
         .info(
             Info()
-                .title("One-Hour-One-Meal API")
-                .description("One-Hour-One-Meal API schema")
+                .title("TodoImproved API")
+                .description("TodoImproved API schema")
                 .version("1.0.0")
         )
 }

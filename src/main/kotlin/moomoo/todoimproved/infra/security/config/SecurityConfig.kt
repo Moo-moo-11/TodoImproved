@@ -4,6 +4,7 @@ import moomoo.todoimproved.infra.security.CustomAuthenticationEntrypoint
 import moomoo.todoimproved.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -23,15 +24,15 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers(
-                    // 인증 대상에서 제외할 URL 설정
-                    "/login",
-                    "/signup",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "todos/**",
-                    "/error"
-                ).permitAll()
+                it
+                    .requestMatchers(HttpMethod.GET, "/todos", "/todos/{todoId}").permitAll()
+                    .requestMatchers(
+                        "/login",
+                        "/signup",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/error"
+                    ).permitAll()
                     .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

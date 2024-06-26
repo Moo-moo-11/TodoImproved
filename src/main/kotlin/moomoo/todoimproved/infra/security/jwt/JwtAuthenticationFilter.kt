@@ -24,9 +24,9 @@ class JwtAuthenticationFilter(
             jwtPlugin.validateToken(jwt)
                 .onSuccess {
                     val userId = it.payload.subject.toLong()
-                    val userIdentifier = it.payload["userIdentifier"] as String
+                    val userNickname = it.payload["userNickname"] as String
 
-                    val principal = UserPrincipal(id = userId, userIdentifier = userIdentifier, roles = setOf())
+                    val principal = UserPrincipal(id = userId, userNickname = userNickname, roles = setOf())
 
                     val authentication =
                         JwtAuthenticationToken(principal, WebAuthenticationDetailsSource().buildDetails(request))

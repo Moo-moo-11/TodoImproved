@@ -21,15 +21,15 @@ class JwtPlugin(
         }
     }
 
-    fun generateAccessToken(subject: String, userIdentifier: String): String {
-        return generateToken(subject, userIdentifier, Duration.ofHours(jwtProperties.accessTokenExpirationHour))
+    fun generateAccessToken(subject: String, userNickname: String): String {
+        return generateToken(subject, userNickname, Duration.ofHours(jwtProperties.accessTokenExpirationHour))
     }
 
-    fun generateToken(subject: String, userIdentifier: String, expirationHour: Duration): String {
+    fun generateToken(subject: String, userNickname: String, expirationHour: Duration): String {
         val now = Instant.now()
         return Jwts.builder()
             .subject(subject)
-            .claims(mapOf("userIdentifier" to userIdentifier))
+            .claims(mapOf("userNickname" to userNickname))
             .issuedAt(Date.from(now))
             .expiration(Date.from(now.plus(expirationHour)))
             .signWith(key)

@@ -6,10 +6,10 @@ import moomoo.todoimproved.domain.user.model.User
 
 @Entity
 class ThumbUp(
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     var user: User,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     var todo: Todo
 ) {
     @Id

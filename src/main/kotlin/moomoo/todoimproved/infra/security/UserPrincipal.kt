@@ -5,10 +5,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 data class UserPrincipal(
     val id: Long,
-    val userIdentifier: String,
+    val userNickname: String,
     val authorities: Collection<GrantedAuthority>
 ) {
-    constructor(id: Long, userIdentifier: String, roles: Set<String>) : this(
-        id = id, userIdentifier = userIdentifier, authorities = roles.map { SimpleGrantedAuthority("ROLE_${it}") }
+    constructor(id: Long, userNickname: String, roles: Set<String>) : this(
+        id = id, userNickname = userNickname, authorities = roles.map { SimpleGrantedAuthority("ROLE_${it}") }
     )
 }

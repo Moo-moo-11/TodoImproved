@@ -12,9 +12,17 @@ class User(
 
     var name: String,
 
-    var profileImage: String? = null
+    var profileImageUrl: String? = null
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun checkPermission(userId: Long): Boolean {
+        return id == userId
+    }
+
+    fun updateProfileImage(imageUrl: String) {
+        profileImageUrl = imageUrl
+    }
 }
