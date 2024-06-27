@@ -29,8 +29,8 @@ class UserServiceImpl(
             .let { UserResponse.from(it) }
     }
 
-    override fun checkDuplicateNickname(request: CheckNicknameRequest): CheckNicknameResponse {
-        return userRepository.existsByNickname(request.nickname)
+    override fun checkDuplicateNickname(nickname: String): CheckNicknameResponse {
+        return userRepository.existsByNickname(nickname)
             .let { if (it) "이미 존재하는 닉네임입니다" else "사용가능한 닉네임입니다" }
             .let { CheckNicknameResponse.from(it) }
     }

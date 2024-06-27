@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ThumbUpRepository : JpaRepository<ThumbUp, Long> {
     fun findByUserIdAndTodoId(userId: Long, todoId: Long): ThumbUp?
+    fun existsByUserIdAndTodoId(userId: Long, todoId: Long): Boolean
 }

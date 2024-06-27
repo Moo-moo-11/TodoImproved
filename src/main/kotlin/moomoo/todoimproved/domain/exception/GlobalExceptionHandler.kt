@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import kotlin.io.AccessDeniedException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -19,7 +18,7 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(e: ModelNotFoundException): ResponseEntity<ErrorResponse> {
+    fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<ErrorResponse> {
         return ResponseEntity
             .status(HttpStatus.FORBIDDEN)
             .body(ErrorResponse(e.message, "403"))

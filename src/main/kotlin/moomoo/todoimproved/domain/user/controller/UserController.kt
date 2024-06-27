@@ -22,9 +22,9 @@ class UserController(
     }
 
     @GetMapping("/users")
-    fun checkDuplicateNickname(@RequestBody request: CheckNicknameRequest): ResponseEntity<CheckNicknameResponse> {
+    fun checkDuplicateNickname(@RequestParam nickname: String): ResponseEntity<CheckNicknameResponse> {
         return ResponseEntity
-            .ok(userService.checkDuplicateNickname(request))
+            .ok(userService.checkDuplicateNickname(nickname))
     }
 
     @PostMapping("/login")

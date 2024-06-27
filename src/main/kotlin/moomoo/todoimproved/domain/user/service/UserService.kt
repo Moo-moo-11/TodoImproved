@@ -9,5 +9,5 @@ interface UserService {
     fun login(request: LoginRequest, response: HttpServletResponse): LoginResponse
     fun getUser(userPrincipal: UserPrincipal, userId: Long): UserResponse
     fun updateUser(userPrincipal: UserPrincipal, userId: Long, request: UpdateUserProfileRequest): UserResponse
-    fun checkDuplicateNickname(request: CheckNicknameRequest): CheckNicknameResponse
+    fun checkDuplicateNickname(nickname: String): CheckNicknameResponse
 }
