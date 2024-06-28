@@ -2,8 +2,8 @@ package moomoo.todoimproved.domain.todo.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import moomoo.todoimproved.domain.comment.model.QComment
+import moomoo.todoimproved.domain.todo.dto.TodoResponse
 import moomoo.todoimproved.domain.todo.model.QTodo
-import moomoo.todoimproved.domain.todo.model.Todo
 import moomoo.todoimproved.domain.todo.model.thumbup.QThumbUp
 import moomoo.todoimproved.domain.user.model.QUser
 import moomoo.todoimproved.infra.querydsl.QueryDslSupport
@@ -21,32 +21,45 @@ class TodoRepositoryImpl : CustomTodoRepository, QueryDslSupport() {
     private val user = QUser.user
     private val thumbUp = QThumbUp.thumbUp
 
-    override fun findAllTodo(pageable: Pageable): Page<Todo> {
+    override fun findAllTodo(pageable: Pageable): Page<TodoResponse> {
         val totalCount = queryFactory.select(todo.count()).from(todo).fetchOne() ?: 0L
 
         val todoList = queryFactory.selectFrom(todo)
             .leftJoin(todo.user, user).fetchJoin()
-            .leftJoin(todo.thumbUps, thumbUp).fetchJoin()
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .distinct()
+            .orderBy(todo.createdAt.desc())
             .fetch()
 
-        return PageImpl(todoList, pageable, totalCount)
+        val countList = queryFactory
+            .select(
+                thumbUp.todo.id.count()
+            )
+            .from(todo)
+            .leftJoin(thumbUp).on(thumbUp.todo.id.eq(todo.id))
+            .groupBy(todo.id)
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .orderBy(todo.createdAt.desc())
+            .fetch()
+
+        val todoResponseList: List<TodoResponse> = todoList.zip(countList) { a, b -> TodoResponse.from(a, b) }
+
+        return PageImpl(todoResponseList, pageable, totalCount)
     }
 
     override fun searchTodos(
         pageable: Pageable,
         title: String?,
-        nickname: String?,
+        name: String?,
         isCompleted: Boolean?,
         daysAgo: Long?
-    ): Page<Todo> {
+    ): Page<TodoResponse> {
         val totalCount = queryFactory.select(todo.count())
             .from(todo)
             .where(
                 titleContains(title),
-                nicknameEq(nickname),
+                nameEq(name),
                 isCompletedEq(isCompleted),
                 createdAfter(daysAgo)
             )
@@ -64,20 +77,38 @@ class TodoRepositoryImpl : CustomTodoRepository, QueryDslSupport() {
 
         val todoList = queryFactory.selectFrom(todo)
             .leftJoin(todo.user, user).fetchJoin()
-            .leftJoin(todo.thumbUps, thumbUp).fetchJoin()
             .where(
                 titleContains(title),
-                nicknameEq(nickname),
+                nameEq(name),
                 isCompletedEq(isCompleted),
                 createdAfter(daysAgo)
             )
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .distinct()
             .orderBy(sort)
             .fetch()
 
-        return PageImpl(todoList, pageable, totalCount)
+        val countList = queryFactory
+            .select(
+                thumbUp.todo.id.count()
+            )
+            .from(todo)
+            .leftJoin(thumbUp).on(thumbUp.todo.id.eq(todo.id))
+            .where(
+                titleContains(title),
+                nameEq(name),
+                isCompletedEq(isCompleted),
+                createdAfter(daysAgo)
+            )
+            .groupBy(todo.id)
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .orderBy(sort)
+            .fetch()
+
+        val todoResponseList = todoList.zip(countList) { a, b -> TodoResponse.from(a, b) }
+
+        return PageImpl(todoResponseList, pageable, totalCount)
     }
 
     override fun deleteTodoWithThumbUpsAndComments(todoId: Long) {
@@ -96,9 +127,9 @@ class TodoRepositoryImpl : CustomTodoRepository, QueryDslSupport() {
         }
     }
 
-    private fun nicknameEq(nickname: String?): BooleanExpression? {
-        return if (nickname != null) {
-            todo.user.nickname.eq(nickname)
+    private fun nameEq(name: String?): BooleanExpression? {
+        return if (name != null) {
+            todo.user.name.eq(name)
         } else {
             null
         }

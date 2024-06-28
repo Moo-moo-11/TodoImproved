@@ -40,12 +40,12 @@ class TodoController(
     fun searchTodos(
         @PageableDefault(size = 12, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam title: String?,
-        @RequestParam nickname: String?,
+        @RequestParam name: String?,
         @RequestParam isCompleted: Boolean?,
         @RequestParam daysAgo: Long?
     ): ResponseEntity<Page<TodoResponse>> {
         return ResponseEntity
-            .ok(todoService.searchTodos(pageable, title, nickname, isCompleted, daysAgo))
+            .ok(todoService.searchTodos(pageable, title, name, isCompleted, daysAgo))
     }
 
     @PostMapping

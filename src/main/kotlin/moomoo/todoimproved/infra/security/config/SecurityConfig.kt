@@ -25,7 +25,6 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/todos/search").authenticated()
                     .requestMatchers(HttpMethod.GET, "/todos", "/todos/{todoId}", "/users").permitAll()
                     .requestMatchers(
                         "/login",

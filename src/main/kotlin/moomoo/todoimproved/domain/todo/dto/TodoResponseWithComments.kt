@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 class TodoResponseWithComments(
     val id: Long,
-    val nickname: String,
+    val name: String,
     val title: String,
     val description: String,
     val isCompleted: Boolean,
@@ -15,13 +15,13 @@ class TodoResponseWithComments(
     val comments: List<CommentResponse>
 ) {
     companion object {
-        fun from(todo: Todo) = TodoResponseWithComments(
+        fun from(todo: Todo, count: Long) = TodoResponseWithComments(
             id = todo.id!!,
-            nickname = todo.user.nickname,
+            name = todo.user.name,
             title = todo.title,
             description = todo.description,
             isCompleted = todo.isCompleted,
-            thumbUpCount = todo.thumbUps.size.toLong(),
+            thumbUpCount = count,
             createdAt = todo.createdAt,
             comments = todo.comments.map { CommentResponse.from(it) }
         )

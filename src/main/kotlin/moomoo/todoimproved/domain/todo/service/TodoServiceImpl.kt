@@ -26,13 +26,13 @@ class TodoServiceImpl(
 ) : TodoService {
 
     override fun getTodoList(pageable: Pageable): Page<TodoResponse> {
-        return todoRepository.findAllTodo(pageable).map { TodoResponse.from(it) }
+        return todoRepository.findAllTodo(pageable)
     }
 
     @Transactional(readOnly = true)
     override fun getTodo(todoId: Long): TodoResponseWithComments {
         return todoRepository.findByIdOrNull(todoId)
-            ?.let { TodoResponseWithComments.from(it) }
+            ?.let { TodoResponseWithComments.from(it, thumbUpRepository.thumbsUpCount(it.id!!)) }
             ?: throw ModelNotFoundException("Todo", todoId)
     }
 
@@ -44,7 +44,6 @@ class TodoServiceImpl(
         daysAgo: Long?
     ): Page<TodoResponse> {
         return todoRepository.searchTodos(pageable, title, nickname, isCompleted, daysAgo)
-            .map { TodoResponse.from(it) }
     }
 
     override fun createTodo(userPrincipal: UserPrincipal, request: CreateTodoRequest): TodoResponse {
@@ -57,7 +56,7 @@ class TodoServiceImpl(
             user = user
         )
             .let { todoRepository.save(it) }
-            .let { TodoResponse.from(it) }
+            .let { TodoResponse.from(it, 0) }
     }
 
     @Transactional
@@ -65,7 +64,7 @@ class TodoServiceImpl(
         return todoRepository.findByIdOrNull(todoId)
             ?.also { if (!it.checkPermission(userPrincipal.id)) throw AccessDeniedException("You do not own this Todo") }
             ?.apply { this.updateTodo(request.title, request.description) }
-            ?.let { TodoResponse.from(it) }
+            ?.let { TodoResponse.from(it, thumbUpRepository.thumbsUpCount(it.id!!)) }
             ?: throw ModelNotFoundException("Todo", todoId)
     }
 
@@ -74,7 +73,7 @@ class TodoServiceImpl(
         return todoRepository.findByIdOrNull(todoId)
             ?.also { if (!it.checkPermission(userPrincipal.id)) throw AccessDeniedException("You do not own this Todo") }
             ?.apply { this.toggleTodo() }
-            ?.let { TodoResponse.from(it) }
+            ?.let { TodoResponse.from(it, thumbUpRepository.thumbsUpCount(it.id!!)) }
             ?: throw ModelNotFoundException("Todo", todoId)
     }
 
@@ -102,6 +101,10 @@ class TodoServiceImpl(
         thumbUpRepository.findByUserIdAndTodoId(userPrincipal.id, todoId)
             ?.let { thumbUpRepository.delete(it) }
             ?: throw IllegalArgumentException("You've not given a thumbs up to this post, so it can't be canceled")
+    }
+
+    private fun ThumbUpRepository.thumbsUpCount(todoId: Long): Long {
+        return thumbUpRepository.countByTodoId(todoId)
     }
 
 }

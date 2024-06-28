@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class TodoResponse(
     val id: Long,
-    val nickname: String,
+    val name: String,
     val title: String,
     val description: String,
     val isCompleted: Boolean,
@@ -13,13 +13,13 @@ data class TodoResponse(
     val createdAt: LocalDateTime
 ) {
     companion object {
-        fun from(todo: Todo) = TodoResponse(
+        fun from(todo: Todo, count: Long) = TodoResponse(
             id = todo.id!!,
-            nickname = todo.user.nickname,
+            name = todo.user.name,
             title = todo.title,
             description = todo.description,
             isCompleted = todo.isCompleted,
-            thumbUpCount = todo.thumbUps.size.toLong(),
+            thumbUpCount = count,
             createdAt = todo.createdAt
         )
     }
