@@ -102,7 +102,7 @@
     - 게시글 단건을 조회하면 댓글 목록이 같이 조회됩니다.
     - 토큰을 검사하여, 작성자 본인만이 본인의 댓글만 수정, 삭제가 가능하도록 만들었습니다.  
 
-## :books: 개선 과제 
+## :books: 개선 과제 요구 사항과 그에 따라 제작한 세부 내용 
 
 - Controller Advice 로 예외 공통화 처리하기
   - 요구 사항 
@@ -127,7 +127,12 @@
     - Service 구현체를 바꿔 끼우더라도 잘 작동하는 변경에 유연한 구조로 만들어 볼 수 있었습니다.
  
 - Spring AOP 적용
+  - 요구 사항
     - Spring AOP 를 사용하여 부가기능을 추가해보세요.
+   
+  - 제작 사항
+    - 적용할만한 적절한 AOP가 떠오르지 않아 실행시간을 측정하는 StopWatch를 사용했습니다.
+    - 빈 DTO를 반환하지 않도록 함수를 살짝 수정했습니다.  
  
 - QueryDSL 을 사용하여 검색 기능 만들기
   - 요구 사항
@@ -169,7 +174,7 @@
    
   - 제작 사항
     - UserService에 대해서만 간단하게 테스트 코드를 작성해보았습니다.
-    - 제대로 된   
+    - 시간이 없어서 2개의 메서드에 대해서만 테스트를 작성해보았습니다.
  
 - Repository 테스트 코드 작성하기
   - 요구 사항 
@@ -178,8 +183,11 @@
   - 제작 사항
     - Data JPA만을 사용한 다른 Repository보다 QueryDsl을 이용한 TodoRepository를 테스트하는 것이 가장 중요하다고 생각해 TodoRepository에 대해서만 테스트를 작성해보았습니다.
     - 예상치 못한 다양한 문제가 생겨서 어려움이 있었습니다. 현재 모두 잘 작동되도록 고쳤지만 이게 옳은 방향인지에 대해서는 여전히 의문을 가지고 있습니다.
-    - 
-    - 현재 하나의 테스트가 너무 많은 것들을 테스트하고 있다는 문제가 있는 것 같습니다. 다음번에는 하나의 테스트가 하나의 사항에 대해서만 테스트하도록 잘 작성해봐야겠습니다. 
+    - 현재 하나의 테스트가 너무 많은 것들을 테스트하고 있다는 문제가 있는 것 같습니다. 다음번에는 하나의 테스트가 하나의 사항에 대해서만 테스트하도록 잘 작성해봐야겠습니다.
+   
+- AWS S3, EC2 이용해 이미지 저장, 배포 해보기
+  - 프로필 이미지 저장 기능을 염두해두고 작성했는데 현재 이미지 업로드가 구현되지 못한 상태입니다.
+  - 테스트 코드 작성이 생각보다 훨씬 오래 걸려서 하지 못했습니다.  
  
 <br/>
 
@@ -194,16 +202,19 @@
 |Command|Method|성공 Status Code|URI|
 |---|---|:---:|---|
 |User 조회|`GET`|`200`|/users/{userId}|
-|User 주소 변경|`PUT`|`200`|/users/{userId}|
+|User 프로필 사진 변경|`PUT`|`200`|/users/{userId}|
 |회원가입|`POST`|`201`|/signup|
 |로그인|`POST`|`200`|/login|
+|닉네임 중복 확인|`GET`|`200`|/users|
 |Todo 목록 조회|`GET`|`200`|/todos|
 |Todo 단건 조회|`GET`|`200`|/todos/{todoId}|
 |Todo 작성|`POST`|`201`|/todos|
 |Todo 할일 완료/진행중|`PATCH`|`200`|/todos/{todoId}|
 |Todo 수정|`PUT`|`200`|/todos/{todoId}|
 |Todo 삭제|`DELETE`|`204`|/todos/{todoId}|
-|Comment 목록 조회|`GET`|`200`|/todos/{todoId}/comments|
+|Todo 검색 조회|`GET`|`200`|/todos/search|
+|Todo 좋아요|`POST`|`200`|/todos/{todoId}/thumb-up|
+|Todo 좋아요 취소|`DELETE`|`200`|/todos/{todoId}/thumb-up|
 |Comment 단건 조회|`GET`|`200`|/todos/{todoId}/comments/{commentId}|
 |Comment 작성|`POST`|`201`|/todos/{todoId}/comments|
 |Comment 수정|`PUT`|`200`|/todos/{todoId}/comments/{commentId}|
