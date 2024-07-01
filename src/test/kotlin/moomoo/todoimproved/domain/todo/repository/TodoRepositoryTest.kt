@@ -82,7 +82,7 @@ class TodoRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `전체 Todo 조회시 좋아요 개수가 제대로 나오는지, createdAt 오름차순으로 정렬되는지 결과 확인`() {
+    fun `전체 Todo 조회시 좋아요 개수가 제대로 나오는지, createdAt 내림차순으로 정렬되는지 결과 확인`() {
         // GIVEN
         val users = createDefaultUsers()
             .also { userRepository.saveAllAndFlush(it) }
@@ -363,7 +363,7 @@ class TodoRepositoryTest @Autowired constructor(
 
         val comments = createDefaultComments(users, todos)
             .also { commentRepository.saveAllAndFlush(it) }
-        
+
         entityManager.clear()
 
         // WHEN
@@ -437,57 +437,6 @@ class TodoRepositoryTest @Autowired constructor(
             Comment(content = "7번 투두에 유저 5번이 단 댓글", todo = todos[6], user = users[4]),
             Comment(content = "8번 투두에 유저 1번이 단 댓글", todo = todos[7], user = users[0]),
             Comment(content = "9번 투두에 유저 2번이 단 댓글", todo = todos[8], user = users[1])
-        )
-    }
-
-    companion object {
-
-        private val DEFAULT_USER_LIST = listOf(
-            User(nickname = "유저1번", password = "비밀번호", name = "유저1번이름"),
-            User(nickname = "유저2번", password = "비밀번호", name = "유저2번이름"),
-            User(nickname = "유저3번", password = "비밀번호", name = "유저3번이름"),
-            User(nickname = "유저4번", password = "비밀번호", name = "유저4번이름"),
-            User(nickname = "유저5번", password = "비밀번호", name = "유저5번이름")
-        )
-
-        private val DEFAULT_TODO_LIST = listOf(
-            Todo(title = "1번 투두", description = "1번 내용", user = DEFAULT_USER_LIST[0]),
-            Todo(title = "2번 투두", description = "2번 내용", user = DEFAULT_USER_LIST[0]),
-            Todo(title = "3번 투두", description = "3번 내용", user = DEFAULT_USER_LIST[1]),
-            Todo(title = "4번 투두", description = "4번 내용", user = DEFAULT_USER_LIST[1]),
-            Todo(title = "5번 투두", description = "5번 내용", user = DEFAULT_USER_LIST[2]),
-            Todo(title = "6번 투두", description = "6번 내용", user = DEFAULT_USER_LIST[2]),
-            Todo(title = "7번 투두", description = "7번 내용", user = DEFAULT_USER_LIST[3]),
-            Todo(title = "8번 투두", description = "8번 내용", user = DEFAULT_USER_LIST[3]),
-            Todo(title = "9번 투두", description = "9번 내용", user = DEFAULT_USER_LIST[4]),
-            Todo(title = "10번 투두", description = "10번 내용", user = DEFAULT_USER_LIST[4])
-        )
-
-        private val DEFAULT_COMMENT_LIST = listOf(
-            Comment(content = "1번 투두에 유저 1번이 단 댓글", todo = DEFAULT_TODO_LIST[0], user = DEFAULT_USER_LIST[0]),
-            Comment(content = "1번 투두에 유저 2번이 단 댓글", todo = DEFAULT_TODO_LIST[0], user = DEFAULT_USER_LIST[1]),
-            Comment(content = "1번 투두에 유저 3번이 단 댓글", todo = DEFAULT_TODO_LIST[0], user = DEFAULT_USER_LIST[2]),
-            Comment(content = "2번 투두에 유저 4번이 단 댓글", todo = DEFAULT_TODO_LIST[1], user = DEFAULT_USER_LIST[3]),
-            Comment(content = "2번 투두에 유저 5번이 단 댓글", todo = DEFAULT_TODO_LIST[1], user = DEFAULT_USER_LIST[4]),
-            Comment(content = "3번 투두에 유저 1번이 단 댓글", todo = DEFAULT_TODO_LIST[2], user = DEFAULT_USER_LIST[0]),
-            Comment(content = "4번 투두에 유저 2번이 단 댓글", todo = DEFAULT_TODO_LIST[3], user = DEFAULT_USER_LIST[1]),
-            Comment(content = "5번 투두에 유저 3번이 단 댓글", todo = DEFAULT_TODO_LIST[4], user = DEFAULT_USER_LIST[2]),
-            Comment(content = "6번 투두에 유저 4번이 단 댓글", todo = DEFAULT_TODO_LIST[5], user = DEFAULT_USER_LIST[3]),
-            Comment(content = "7번 투두에 유저 5번이 단 댓글", todo = DEFAULT_TODO_LIST[6], user = DEFAULT_USER_LIST[4]),
-            Comment(content = "8번 투두에 유저 1번이 단 댓글", todo = DEFAULT_TODO_LIST[7], user = DEFAULT_USER_LIST[0]),
-            Comment(content = "9번 투두에 유저 2번이 단 댓글", todo = DEFAULT_TODO_LIST[8], user = DEFAULT_USER_LIST[1])
-        )
-
-        private val DEFAULT_THUMB_UP_LIST = listOf(
-            ThumbUp(user = DEFAULT_USER_LIST[0], todo = DEFAULT_TODO_LIST[0]),
-            ThumbUp(user = DEFAULT_USER_LIST[1], todo = DEFAULT_TODO_LIST[0]),
-            ThumbUp(user = DEFAULT_USER_LIST[2], todo = DEFAULT_TODO_LIST[0]),
-            ThumbUp(user = DEFAULT_USER_LIST[3], todo = DEFAULT_TODO_LIST[0]),
-            ThumbUp(user = DEFAULT_USER_LIST[4], todo = DEFAULT_TODO_LIST[0]),
-            ThumbUp(user = DEFAULT_USER_LIST[0], todo = DEFAULT_TODO_LIST[4]),
-            ThumbUp(user = DEFAULT_USER_LIST[1], todo = DEFAULT_TODO_LIST[4]),
-            ThumbUp(user = DEFAULT_USER_LIST[2], todo = DEFAULT_TODO_LIST[4]),
-            ThumbUp(user = DEFAULT_USER_LIST[0], todo = DEFAULT_TODO_LIST[9]),
         )
     }
 }
