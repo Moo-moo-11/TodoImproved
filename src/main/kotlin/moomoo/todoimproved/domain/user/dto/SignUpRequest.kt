@@ -11,8 +11,8 @@ data class SignUpRequest(
     )
     val nickname: String,
     @field:Pattern(
-        regexp = """[a-zA-Z\d]{3,20}""",
-        message = "비밀번호는 최소 3자 이상 20자 이하, 알파벳 대소문자, 숫자로 구성되어야 합니다"
+        regexp = """[a-zA-Z\d!@#$?&%^*+=-]{4,20}""",
+        message = "비밀번호는 최소 4자 이상 20자 이하, 알파벳 대소문자, 숫자로 구성되어야 합니다"
     )
     val password: String,
     val confirmPassword: String,

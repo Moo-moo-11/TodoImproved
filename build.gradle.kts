@@ -31,6 +31,7 @@ val kotestVersion = "5.8.1"
 val mockkVersion = "1.13.8"
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")

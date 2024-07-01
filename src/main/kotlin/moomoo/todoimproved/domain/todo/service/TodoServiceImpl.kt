@@ -11,6 +11,7 @@ import moomoo.todoimproved.domain.todo.model.thumbup.ThumbUp
 import moomoo.todoimproved.domain.todo.repository.TodoRepository
 import moomoo.todoimproved.domain.todo.repository.thumbup.ThumbUpRepository
 import moomoo.todoimproved.domain.user.repository.UserRepository
+import moomoo.todoimproved.infra.aop.StopWatch
 import moomoo.todoimproved.infra.security.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -29,6 +30,7 @@ class TodoServiceImpl(
         return todoRepository.findAllTodo(pageable)
     }
 
+    @StopWatch
     @Transactional(readOnly = true)
     override fun getTodo(todoId: Long): TodoResponseWithComments {
         return todoRepository.findByIdOrNull(todoId)
