@@ -193,7 +193,7 @@
 
 <strong>Use Case Diagram</strong>
 
-
+![Picture](/readme_assets/use_case_diagram.png)
 
 <br/>
 
@@ -225,7 +225,7 @@
 
 <strong>ERD</strong>
 
-
+![Picture](/readme_assets/erd.png)
 
 <br/>
 
